@@ -7,7 +7,7 @@ var pool = mysql.createPool({
     database: "bo_dsp"
 });
 
-function fetch_devices(req,res) {
+function fetch_devices(req,res,cache,query) {
 
     pool.getConnection(function(err,connection){
         if (err) {
@@ -18,9 +18,16 @@ function fetch_devices(req,res) {
 
         console.log('connected as id ' + connection.threadId);
 
-        connection.query("select * from devices",function(err,rows){
+        connection.query(query,function(err,rows){
             connection.release();
             if(!err) {
+                cache.set( query, rows, function( err, success ){
+                    if( !err && success ){
+                        console.log( success );
+                        // true
+                        // ... do something ...
+                    }
+                });
                 res.json(rows);
             }
         });

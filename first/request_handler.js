@@ -3,12 +3,12 @@
  */
 
 var express = require('express');
-var mysql_connect = require('./mysql_connect')
 
+var abstract = require('./abstract_mysql_connect')
 var app = express();
 
 app.get("/devices", function (req, res) {
-    mysql_connect.devices(req,res);
+    abstract.devices(req,res);
 });
 
 var server = app.listen(3000, function () {
