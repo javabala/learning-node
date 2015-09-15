@@ -3,19 +3,19 @@
  */
 var mysql_connect = require('./mysql_connect');
 
-var NodeCache = require( "node-cache" );
-var dbCache = new NodeCache( { stdTTL: 10, checkperiod: 120 } );
+var NodeCache = require("node-cache");
+var dbCache = new NodeCache({stdTTL: 10, checkperiod: 120});
 var deviceQuery = "select * from devices";
 
-function devices(req,res){
-    dbCache.get( deviceQuery, function( err, value ){
-        if( !err ){
-            if(value == undefined){
+function devices(req, res) {
+    dbCache.get(deviceQuery, function (err, value) {
+        if (!err) {
+            if (value == undefined) {
                 // key not found
                 console.log("record not found in cahce. connecting db to retrieve")
-                mysql_connect.devices(req,res,dbCache,deviceQuery);
-            }else{
-                console.log( "fetching records from cache" );
+                mysql_connect.devices(req, res, dbCache, deviceQuery);
+            } else {
+                console.log("fetching records from cache");
                 // got records from cache
                 res.json(value);
             }
@@ -23,4 +23,10 @@ function devices(req,res){
     });
 }
 
+function flush_all_caches(req, res) {
+    dbCache.flushAll();
+    res.send("Deleted all the cache data");
+}
 module.exports.devices = devices;
+module.exports.flush_caches = flush_all_caches;
+

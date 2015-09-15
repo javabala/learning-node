@@ -8,7 +8,11 @@ var abstract = require('./abstract_mysql_connect')
 var app = express();
 
 app.get("/devices", function (req, res) {
-    abstract.devices(req,res);
+    abstract.devices(req, res);
+});
+
+app.get("/flush_caches", function (req, res) {
+    abstract.flush_caches(req, res);
 });
 
 var server = app.listen(3000, function () {
