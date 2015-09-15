@@ -1,19 +1,35 @@
 var mysql = require('mysql');
 
 var pool = mysql.createPool({
-	host : "192.168.1.24",
-	user : "root",
-	password : "a",
-	database : "bo_dsp"
+    host: "192.168.1.24",
+    user: "root",
+    password: "a",
+    database: "bo_dsp"
 });
 
+function handle_database(req,res) {
 
-pool.getConnection(function(err,connection){
-	connection.query("select * from devices",function(err,rows){
-	if(err)
-		console.log("Error "+err);
-	else
-		console.log(rows);
+    pool.getConnection(function(err,connection){
+        if (err) {
+            connection.release();
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+        }
 
-	connection.release(); 
-})});
+        console.log('connected as id ' + connection.threadId);
+
+        connection.query("select * from devices",function(err,rows){
+            connection.release();
+            if(!err) {
+                res.json(rows);
+            }
+        });
+
+        connection.on('error', function(err) {
+            res.json({"code" : 100, "status" : "Error in connection database"});
+            return;
+        });
+    });
+}
+
+module.exports.database = handle_database();
