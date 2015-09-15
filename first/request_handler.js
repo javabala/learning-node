@@ -8,7 +8,7 @@ var mysql_connect = require('./mysql_connect')
 var app = express();
 
 app.get("/devices", function (req, res) {
-    mysql_connect.database(req,res);
+    mysql_connect.devices(req,res);
 });
 
 var server = app.listen(3000, function () {

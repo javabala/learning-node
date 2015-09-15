@@ -7,7 +7,7 @@ var pool = mysql.createPool({
     database: "bo_dsp"
 });
 
-function handle_database(req,res) {
+function fetch_devices(req,res) {
 
     pool.getConnection(function(err,connection){
         if (err) {
@@ -32,4 +32,4 @@ function handle_database(req,res) {
     });
 }
 
-module.exports.database = handle_database();
+module.exports.devices = fetch_devices;
