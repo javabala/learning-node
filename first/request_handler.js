@@ -17,7 +17,7 @@ app.get("/flush_caches", function (req, res) {
 
 var server = app.listen(3000, function () {
 
-    var host = server.address().localAddress;
+    var host = server.address().address;
     var port = server.address().port;
 
     console.log("Server started and listening on http://%s:%s", host, port);
